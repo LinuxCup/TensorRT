@@ -38,6 +38,7 @@ set(PLUGIN_CU_SOURCES)
 
 set(PLUGIN_LISTS
     mysortPlugin
+    DCNv2
     batchTilePlugin
     batchedNMSPlugin
     clipPlugin

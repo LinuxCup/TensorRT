@@ -69,6 +69,7 @@ using namespace nvinfer1::plugin;
 #include "splitGeLUPlugin.h"
 #include "voxelGenerator.h"
 #include "mysortPlugin/mysortPlugin.h"
+#include "DCNv2/DCNv2.hpp"
 
 using nvinfer1::plugin::RPROIParams;
 
@@ -179,6 +180,7 @@ extern "C"
     bool initLibNvInferPlugins(void* logger, const char* libNamespace)
     {
         initializePlugin<nvinfer1::plugin::MysortPluginCreator>(logger, libNamespace);
+        initializePlugin<nvinfer1::plugin::DCNv2PluginCreator>(logger, libNamespace);
         initializePlugin<nvinfer1::plugin::BatchTilePluginCreator>(logger, libNamespace);
         initializePlugin<nvinfer1::plugin::BatchedNMSPluginCreator>(logger, libNamespace);
         initializePlugin<nvinfer1::plugin::BatchedNMSDynamicPluginCreator>(logger, libNamespace);
