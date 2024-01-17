@@ -19,6 +19,11 @@ cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 include(cmake/modules/set_ifndef.cmake)
 include(cmake/modules/find_library_create_target.cmake)
 
+set(TRT_LIB_DIR /home/zhenghu/Downloads/TensorRT-8.5.1.7.Linux.x86_64-gnu.cuda-11.8.cudnn8.6/TensorRT-8.5.1.7)
+# set(TRT_RELEASE /home/zhenghu/Downloads/TensorRT-8.5.1.7.Linux.x86_64-gnu.cuda-11.8.cudnn8.6/TensorRT-8.5.1.7)
+# set(TENSORRT_LIBRARY_INFER /home/zhenghu/Downloads/TensorRT-8.5.1.7.Linux.x86_64-gnu.cuda-11.8.cudnn8.6/TensorRT-8.5.1.7/lib/libnvinfer.so)
+# set(TENSORRT_LIBRARY_INFER_PLUGIN /home/zhenghu/Downloads/TensorRT-8.5.1.7.Linux.x86_64-gnu.cuda-11.8.cudnn8.6/TensorRT-8.5.1.7/lib/libnvinfer_plugin.so)
+# set(TENSORRT_LIBRARY_MYELIN /home/zhenghu/Downloads/TensorRT-8.5.1.7.Linux.x86_64-gnu.cuda-11.8.cudnn8.6/TensorRT-8.5.1.7/lib/libmyelin.so)
 set_ifndef(TRT_LIB_DIR ${CMAKE_BINARY_DIR})
 set_ifndef(TRT_OUT_DIR ${CMAKE_BINARY_DIR})
 
@@ -88,8 +93,8 @@ endif()
 ############################################################################################
 # Dependencies
 
-set(DEFAULT_CUDA_VERSION 11.3.1)
-set(DEFAULT_CUDNN_VERSION 8.2)
+set(DEFAULT_CUDA_VERSION 11.8)
+set(DEFAULT_CUDNN_VERSION 8.6)
 set(DEFAULT_PROTOBUF_VERSION 3.20.1)
 
 # Dependency Version Resolution
@@ -130,8 +135,8 @@ if(BUILD_PARSERS)
     configure_protobuf(${PROTOBUF_VERSION})
 endif()
 
-find_library_create_target(nvinfer nvinfer SHARED ${TRT_LIB_DIR})
-find_library_create_target(nvuffparser nvparsers SHARED ${TRT_LIB_DIR})
+find_library_create_target(nvinfer nvinfer SHARED ${TRT_LIB_DIR}/lib)
+find_library_create_target(nvuffparser nvparsers SHARED ${TRT_LIB_DIR}/lib)
 
 find_library(CUDART_LIB cudart_static HINTS ${CUDA_TOOLKIT_ROOT_DIR} PATH_SUFFIXES lib lib/x64 lib64)
 

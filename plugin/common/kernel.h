@@ -107,6 +107,8 @@ pluginStatus_t priorBoxInference(cudaStream_t stream, nvinfer1::plugin::PriorBox
 
 pluginStatus_t lReLUInference(cudaStream_t stream, int32_t n, float negativeSlope, const void* input, void* output);
 
+pluginStatus_t mysortInference(cudaStream_t stream, int32_t n, float negativeSlope, void const* input, void* output);
+
 pluginStatus_t reorgInference(cudaStream_t stream, int32_t batch, int32_t C, int32_t H, int32_t W, int32_t stride,
     const void* input, void* output);
 

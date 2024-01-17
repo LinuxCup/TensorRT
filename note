@@ -1,0 +1,50 @@
+## 1.拉取子模块
+command:
+    $git submodule update --init --recursive
+
+
+
+
+## 2.编译版本号
+
+    编译的版本号是否一致,对应的文件夹: include/NvInferVersion.h
+
+## 
+
+## 3.onnx子模块注册算子
+
+    将parse/onnx/builtin_op_importers.cpp中注册所需要的算子
+
+eg:
+
+DEFINE_BUILTIN_OP_IMPORTER(LeakyRelu)
+
+{
+
+    OnnxAttrs attrs(node, ctx);
+
+    float alpha = attrs.get<float>("alpha", 0.01f);
+
+    return activationHelper(ctx, node, inputs, nvinfer1::ActivationType::kLEAKY_RELU, &alpha);
+
+}
+
+DEFINE_BUILTIN_OP_IMPORTER(Mysort)
+
+{
+
+    return elementwiseHelper(ctx, node, inputs, nvinfer1::ElementWiseOperation::kLESS);
+
+}
+
+
+
+## 4.编译
+
+command：
+
+$mkdir -p build && cd build
+
+$cmake .. -DTRT_LIB_DIR=$TRT_LIBPATH -DTRT_OUT_DIR=`pwd`/out -D CMAKE_CUDA_COMPILER="/usr/local/cuda/bin/nvcc"
+
+$make -j$(nproc)

@@ -16,6 +16,10 @@
 #
 add_custom_target(plugin)
 
+if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+set(CMAKE_CUDA_ARCHITECTURES 70 75 80)
+endif(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+
 set(TARGET_NAME nvinfer_plugin)
 set(SHARED_TARGET ${TARGET_NAME})
 set(STATIC_TARGET ${TARGET_NAME}_static)
@@ -33,6 +37,7 @@ set(PLUGIN_CU_SOURCES)
 
 
 set(PLUGIN_LISTS
+    mysortPlugin
     batchTilePlugin
     batchedNMSPlugin
     clipPlugin
