@@ -76,7 +76,7 @@ int partition(int *arr, float *coor_array,  int l, int h)
 void quickSortIterative(int *arr, float *coor_array, int l, int h)
 {
     // create an auxiliary stack
-    int stack[10000];
+    int* stack = new int[h+1];
 
     // init top of stack
     int top = -1;
@@ -104,6 +104,7 @@ void quickSortIterative(int *arr, float *coor_array, int l, int h)
             stack[++top] = h;
          }
     }
+    free(stack);
 }
 
 inline double getTime(void) {
@@ -119,6 +120,7 @@ pluginStatus_t Mysort::sort_inference(cudaStream_t stream, void const* const* in
     const void* src_coor = inputs[1];
     const int* valid_num = (int*)inputs[2];
     void* ret = outputs[0];
+    cudaMemsetAsync(ret, 0, 152064 * sizeof(float), stream);
     int valid_num_h;
     double t1 = getTime();
     cudaMemcpyAsync(
@@ -130,6 +132,39 @@ pluginStatus_t Mysort::sort_inference(cudaStream_t stream, void const* const* in
         );
     std::cout << "sort valid num: " << valid_num_h << std::endl;
     double t2 = getTime();
+    
+
+    // float* test_h = new float[500];
+    // std::cout << "_______________src:" << std::endl;
+    // cudaMemcpyAsync(
+    //         test_h,
+    //         src + 5000 * sizeof(float),
+    //         500 * sizeof(float),
+    //         cudaMemcpyDeviceToHost,
+    //         stream
+    //     );
+    // for (int i = 0; i < 500; i++)
+    // {
+    //     std::cout << test_h[i] << " ";
+    // }
+    // std::cout << std::endl;
+    // free(test_h);
+
+    // std::cout << "_______________coor:" << std::endl;
+    // int* test_coor_h = new int[500];
+    // cudaMemcpyAsync(
+    //         test_coor_h,
+    //         src_coor + 5000 * sizeof(int),
+    //         500 * sizeof(int),
+    //         cudaMemcpyDeviceToHost,
+    //         stream
+    //     );
+    // for (int i = 0; i < 500; i++)
+    // {
+    //     std::cout << test_coor_h[i] << " ";
+    // }
+    // std::cout << std::endl;
+    // free(test_coor_h)
     
 
     // typedef cub::BlockRadixSort<int, 128, 512> BlockRadixSort;
@@ -166,10 +201,12 @@ pluginStatus_t Mysort::sort_inference(cudaStream_t stream, void const* const* in
     quickSortIterative(ret_h, src_h, 0, valid_num_h-1);
     double t6 = getTime();
 
+    // std::cout << "_________________________res______________________" << std::endl;
     // for (int i = 0; i < 50; i++)
     // {
     //     std::cout << ret_h[i] << " " << src_h[i] << std::endl;
     // }
+    // std::cout << std::endl;
 
     cudaMemcpyAsync(
             ret,
@@ -192,7 +229,7 @@ pluginStatus_t Mysort::sort_inference(cudaStream_t stream, void const* const* in
     // std::cout << "t4:" << t5 - t4 << std::endl;
     // std::cout << "t5:" << t6 - t5 << std::endl;
     // std::cout << "t6:" << t7 - t6 << std::endl;
-    // std::cout << "total:" << t7 - t0 << std::endl;
+    std::cout << "sort time esplased:" << t7 - t0 << std::endl;
 
     return STATUS_SUCCESS;
 }
